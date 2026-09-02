@@ -168,11 +168,11 @@ if(ageTrans) {
   cv4fold_certAge[, AgePred:=fun_llin3.inv(AgePred, maturity=maturity)]
 }
 
-dt_cert <- cv4fold_certAge[, .(r=round(cor(AgeYrs, AgePred), 2),
+dt_cert <- cv4fold_certAge[!is.na(AgePred), .(r=round(cor(AgeYrs, AgePred), 2),
                                MAE=round(median(abs(AgeYrs - AgePred)), 2)), 
                            by=Model]
 
-ggplot(cv4fold_certAge, aes(AgeYrs, AgePred)) + geom_point() + geom_abline(slope=1) + 
+ggplot(cv4fold_certAge[!is.na(AgePred),], aes(AgeYrs, AgePred)) + geom_point() + geom_abline(slope=1) + 
   geom_smooth(method="lm") + facet_grid(Model~.) +
   geom_text(data=dt_cert, col="red", aes(x=Inf, y=-Inf, vjust=-1, hjust=1.1, 
                              label=paste0("r = ", r, "\nMAE = ", MAE))) 
@@ -205,11 +205,12 @@ for(p in propUncert) {
     cv4fold_uncertAge[, AgePred:=fun_llin3.inv(AgePred, maturity=maturity)]
   }
   
-  dt_uncert <- cv4fold_uncertAge[, .(r=round(cor(AgeYrs, AgePred), 2),
+  dt_uncert <- cv4fold_uncertAge[!is.na(AgePred), .(r=round(cor(AgeYrs, AgePred), 2),
                                      MAE=round(median(abs(AgeYrs - AgePred)), 2)),
                                  by=.(Model, Data)]
 
-  ggplot(cv4fold_uncertAge, aes(AgeYrs, AgePred)) + geom_point() + geom_abline(slope=1) + 
+  ggplot(cv4fold_uncertAge[!is.na(AgePred), ], aes(AgeYrs, AgePred)) + geom_point() + 
+    geom_abline(slope=1) + 
     geom_smooth(method="lm") + facet_grid(Model~Data) +
     geom_text(data=dt_uncert, col="red", aes(x=Inf, y=-Inf, vjust=-1, hjust=1.1, 
                                   label=paste0("r = ", r, "\nMAE = ", MAE)))
