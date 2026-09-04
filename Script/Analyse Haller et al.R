@@ -12,8 +12,8 @@ source("./Script/CrossValidate_uncertAge.R")
 source("./Script/Fit_epiClocks.R")
 
 #### Prelim data prep ####
-meta <- fread(file="../Haller_et_al_2025_supp_mat_doi_10_5061_dryad_wstqjq2wq__v20250207/Extern_Samples_AgeingClock.txt")
-meth <- fread(file="../Haller_et_al_2025_supp_mat_doi_10_5061_dryad_wstqjq2wq__v20250207/MethylationData_AgeingClock.txt")
+meta <- fread(file="./Data/Haller_et_al_2025_supp_mat_doi_10_5061/Extern_Samples_AgeingClock.txt")
+meth <- fread(file="./Data/Haller_et_al_2025_supp_mat_doi_10_5061/MethylationData_AgeingClock.txt")
 finx <- as.matrix(t(meth[, -1]))
 colnames(finx) <- meth[, CpG]
 keep <- apply(finx, 2, function(x) mean(x)>=0.05 & mean(x)<=0.95 & sd(x)>=0.05)
@@ -93,10 +93,10 @@ save(list = c("kfolds", "ls_fit_informativeNarrow"),
 #### Raw predictors ####
 ls_fitrandomRaw <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, PCR=FALSE,
                            glmnet_alpha=0.2, glmnet_lambda="min", lnstd="wide",
-                           #niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
-                           #niter_uncert=c(100, 100), nburnin_uncert=c(50, 50), 
+                           # niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
+                           # niter_uncert=c(100, 100), nburnin_uncert=c(50, 50),
                            niter_cert=c(25000, 50000), nburnin_cert=c(5000, 20000),
-                           niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000), 
+                           niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000),
                            propUncert=c(0.3), y_min="random", HS=FALSE,
                            pathResults="./HallerResultsRandomRaw", 
                            pathConvergence="./HallerConvergenceRandomRaw")
