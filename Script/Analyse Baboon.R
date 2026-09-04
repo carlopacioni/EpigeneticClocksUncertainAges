@@ -8,9 +8,9 @@ source("./Script/Fit_epiClocks.R")
 #### Prelim data prep ####
 # using the R package subset of the data. >300 samples are available from Lu et al paper (data in 'mydata_GitHub.Rds')
 # This dataset is probably a more realistic rapresentation of what available for wildlife
-load("../mammalian-methyl-clocks-v1.1.0/jazoller96-mammalian-methyl-clocks-a9425df/TutorialData/methdatConsortium_subset.rda")
+load("./Data/TutorialData/methdatConsortium_subset.rda")
 datAllSamp <- methdatConsortium_subset
-load("../mammalian-methyl-clocks-v1.1.0/jazoller96-mammalian-methyl-clocks-a9425df/TutorialData/infoConsortium.rda")
+load("./Data/TutorialData/infoConsortium.rda")
 infoAllSamp <- infoConsortium
 anAge <- getAnAgeTable() %>%
   dplyr::filter(profiled == T) %>%
