@@ -139,7 +139,7 @@ if(ageTrans) {
 }
 
 dt <- glmnet_res[, .(r=round(cor(AgeYrs, AgePred), 2),
-                 MAE=round(median(abs(AgeYrs - AgePred)), 2)), 
+                 MAE=round(mean(abs(AgeYrs - AgePred)), 2)), 
                  by=PC]
 
 ggplot(glmnet_res, aes(AgeYrs, AgePred)) + geom_point() + geom_abline(slope=1) + 
@@ -169,7 +169,7 @@ if(ageTrans) {
 }
 
 dt_cert <- cv4fold_certAge[!is.na(AgePred), .(r=round(cor(AgeYrs, AgePred), 2),
-                               MAE=round(median(abs(AgeYrs - AgePred)), 2)), 
+                               MAE=round(mean(abs(AgeYrs - AgePred)), 2)), 
                            by=Model]
 
 ggplot(cv4fold_certAge[!is.na(AgePred),], aes(AgeYrs, AgePred)) + geom_point() + geom_abline(slope=1) + 
@@ -206,7 +206,7 @@ for(p in propUncert) {
   }
   
   dt_uncert <- cv4fold_uncertAge[!is.na(AgePred), .(r=round(cor(AgeYrs, AgePred), 2),
-                                     MAE=round(median(abs(AgeYrs - AgePred)), 2)),
+                                     MAE=round(mean(abs(AgeYrs - AgePred)), 2)),
                                  by=.(Model, Data)]
 
   ggplot(cv4fold_uncertAge[!is.na(AgePred), ], aes(AgeYrs, AgePred)) + geom_point() + 
