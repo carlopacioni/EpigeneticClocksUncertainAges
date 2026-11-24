@@ -26,10 +26,13 @@ hist(meta[, AgeYrs])
 
 pathResults="./HallerResultsRandom"
 dir.create(pathResults, showWarnings = FALSE)
-ggplot(meta, aes(AgeYrs)) + 
-  geom_histogram(breaks=seq(floor(meta[, min(AgeYrs)]), ceiling(meta[, max(AgeYrs)]), by=1))
+Hal_histo <- ggplot(meta, aes(AgeYrs)) + 
+  geom_histogram(breaks=seq(floor(meta[, min(AgeYrs)]), ceiling(meta[, max(AgeYrs)]), by=1)) +
+  labs(x="Age (years)", y="Count")
 ggsave(file.path(pathResults, "AgeDistributionHaller.png"), 
        width = 12, height = 7, units = "cm")
+
+saveRDS(Hal_histo, file.path(pathResults, "AgeDistributionHaller.rds"))
 
 meta[, AgeClass := cut(AgeYrs, breaks=0:ceiling(max(AgeYrs)))]
 meta[, nAgeClass := .N, by=AgeClass]

@@ -29,9 +29,12 @@ hist(ys$AgeLL)
 
 pathResults="./BaboonResultsRandom"
 dir.create(pathResults, showWarnings = FALSE)
-ggplot(ys, aes(Age)) + geom_histogram(breaks=seq(floor(min(ys$Age)), ceiling(max(ys$Age)), by=1))
-ggsave(file.path(pathResults, "AgeDistributionBaboons.png"), 
+Bab_histo <- ggplot(ys, aes(Age)) + 
+  geom_histogram(breaks=seq(floor(min(ys$Age)), ceiling(max(ys$Age)), by=1)) +
+  labs(x="Age (years)", y="Count")
+ggsave(file.path(pathResults, "AgeDistributionBaboons.png"), plot = Bab_histo,
        width = 12, height = 7, units = "cm")
+saveRDS(Bab_histo, file.path(pathResults, "AgeDistributionBaboons.rds"))
 
 # Note keeping the label 'AgeYrs' to get the functions to work, but this is LL transformed
 meta <- data.table(RNR=seq_along(ys$AgeLL), AgeYrs=ys$AgeLL, 
