@@ -105,5 +105,5 @@ ggsave("./BaboonResultsRandomNarrow/uncert_p_05_randNar_plot_final.png",
        width=15, height=8, units='cm')
 
 babGrop <- plot_grid(bab_info_narr_plot, bab_rand_narr_plot, ncol=1, labels="AUTO")
-save_plot(file.path(path, "babGrop.png"), hallGrop, #base_asp = 1
+save_plot(file.path(path, "babGrop.png"), babGrop, #base_asp = 1
           base_width=5.9, base_height=5.9)
