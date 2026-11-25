@@ -97,9 +97,8 @@ fit_dropUncertClocks <- function(nFolds, kfolds, ageTrans=FALSE, SSL=TRUE, HS=TR
   require(rsample)
   require(parallel)
   require(MammalMethylClock)
-  source("./Script/cvkfold_glmnet.R")
-  source("./Script/CrossValidate_certAge.R")
-  source("./Script/CrossValidate_uncertAge.R")
+  source("./Script/cvkfold_glmnet_dropUncert.R")
+  source("./Script/CrossValidate_dropUncertAge.R")
   source("./Script/Nimble_FUNs/LogLineraAgeInvTransformation.R")
   
   dir.create(pathResults, showWarnings=FALSE)
