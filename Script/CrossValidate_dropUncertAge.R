@@ -13,8 +13,8 @@
 #' pathModels path to the text file where the models are stored
 #' pathConvergence where to write the coefficient values (and convergence diagnostics)
 
-cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1,
-                            SSL, HS, PCR, niter, nburnin, nchains, 
+cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1, p, trans,
+                            SSL, HS, PCR, niter, nburnin, nchains, maturity,
                               pathModels, pathConvergence) {
   require(data.table)
   require(nimble)

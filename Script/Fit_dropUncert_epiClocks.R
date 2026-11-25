@@ -171,8 +171,7 @@ lsubtable <- vector("list", length = length(propUncert) + 1)
 
 for(p in propUncert) {
   lcv4fold_uncertAge <- parLapply(cl=cl, seq_len(nFolds), fun=cvKfold_dropUncertAge, 
-                                  kfold_sel=kfolds, p=p, probq=probq, std=lnstd,
-                                  y_min=y_min, qInterval=qInterval,
+                                  kfold_sel=kfolds, p=p, 
                                   trans=ageTrans, maturity=maturity, PCvar=PCvar, 
                                   lambda1=lambda1, SSL=SSL, HS=HS, PCR=PCR,
                                   niter=niter_uncert, nburnin=nburnin_uncert, 
