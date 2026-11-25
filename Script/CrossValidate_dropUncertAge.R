@@ -35,12 +35,6 @@ cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1,
   ssize_train <- train[, table(AgeClass)]
   ssize_test <- test[, table(AgeClass)]
   
-  write.csv(ssize_train, 
-            file = file.path(pathConvergence, paste0("Cert_AgeClass_N_fold", k,"_train.csv"))) 
-  
-  write.csv(ssize_test, 
-            file = file.path(pathConvergence, paste0("Cert_AgeClass_N_fold", k,"_test.csv"))) 
-  
   if(PCR) {
     # Prep train data
     pca <- prcomp(train[, -(1:3)])
