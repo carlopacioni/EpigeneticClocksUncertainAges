@@ -134,7 +134,7 @@ fit_dropUncertClocks <- function(nFolds, kfolds, ageTrans=FALSE, SSL=TRUE, HS=TR
   for(p in propUncert) {
     
 glmnet_res <- lapply(seq_len(nFolds), cvKfold_glmnet_dropUncert, kfold_sel=kfolds, 
-                     PCvar=PCvar,
+                     PCvar=PCvar, trans=ageTrans,
                      glmnet_alpha=glmnet_alpha, glmnet_lambda=glmnet_lambda, p=p)
 glmnet_res <- do.call(rbind, glmnet_res)
 if(ageTrans) {

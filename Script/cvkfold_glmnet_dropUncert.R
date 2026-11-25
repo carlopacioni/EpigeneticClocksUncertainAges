@@ -1,4 +1,4 @@
-cvKfold_glmnet_dropUncert <- function(k, kfold_sel, PCvar, 
+cvKfold_glmnet_dropUncert <- function(k, kfold_sel, PCvar, trans,
                                       glmnet_alpha, glmnet_lambda, p) {
   
   #### Prep data ####
