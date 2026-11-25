@@ -97,11 +97,11 @@ save(list = c("kfolds", "ls_fit_informativeNarrow"),
 #### drop uncertain age ####
 ls_fit_dropUncertain <- fit_dropUncertClocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, 
                                        glmnet_alpha=0.2, glmnet_lambda="min", lnstd="narrow",
-                                       qInterval = 1.5, cert=FALSE,
-                                       niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
-                                       niter_uncert=c(100, 100), nburnin_uncert=c(50, 50),
-                                       #niter_cert=c(25000, 50000), nburnin_cert=c(5000, 20000),
-                                       #niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000), 
+                                       qInterval = 1.5, cert=FALSE, HS=FALSE,
+                                       # niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
+                                       # niter_uncert=c(100, 100), nburnin_uncert=c(50, 50),
+                                       niter_cert=c(25000, 50000), nburnin_cert=c(5000, 20000),
+                                       niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000),
                                        propUncert=c(0.3, 0.4, 0.5), y_min="informative",
                                        pathResults="./HallerResultsDropUncert", 
                                        pathConvergence="./HallerConvergenceDropUncert")

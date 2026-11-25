@@ -30,7 +30,6 @@ cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1, p, trans,
   test <- assessment(kfold_sel$splits[[k]])
   
   y <- train[, AgeYrs]
-  n <- length(y)
   
   ssize_train <- train[, table(AgeClass)]
   ssize_test <- test[, table(AgeClass)]
@@ -68,6 +67,7 @@ cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1, p, trans,
   # remove samples with uncertain age
   pcax <- pcax[!s, ]
   y <- train[!s, AgeYrs]
+  n <- length(y)
   
   #### PC SSL regression ####
   if(SSL) {
@@ -97,9 +97,10 @@ cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1, p, trans,
   res <- MCMCsummary(SSLpcaSamples)
   message(paste("Ran SSL in", round(SSL_time[3], 1), "secs"))
   write.csv(res[grep("^beta", rownames(res)),], 
-            file=file.path(pathConvergence, paste0("SSL_PC_cert_betas_fold", k,".csv")))
+            file=file.path(pathConvergence, 
+                           paste0("SSL_PC_cert_betas_fold", k, "_p", p,".csv")))
   MCMCtrace(SSLpcaSamples, filename = file.path(pathConvergence, 
-                                    paste0("SSL_PC_cert_betas_fold", k,".pdf")), 
+                            paste0("SSL_PC_cert_betas_fold", k, "_p", p,".pdf")), 
             open_pdf = FALSE)
   
   # res
@@ -149,9 +150,10 @@ cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1, p, trans,
   # res[grep("^beta", rownames(res)),]
   # #MCMCtrace(HSpcaSamples)
   write.csv(res[grep("^beta", rownames(res)),], 
-            file=file.path(pathConvergence, paste0("HS_PC_cert_betas_fold", k, ".csv")))
+            file=file.path(pathConvergence, 
+                           paste0("HS_PC_cert_betas_fold", k, "_p", p,".csv")))
   MCMCtrace(HSpcaSamples, filename = file.path(pathConvergence, 
-                                               paste0("HS_PC_cert_betas_fold", k,".pdf")), 
+                           paste0("HS_PC_cert_betas_fold", k, "_p", p,".pdf")), 
             open_pdf = FALSE)
   
   mu_pred <- res[grep("^mu_pred", rownames(res)), "50%"]
