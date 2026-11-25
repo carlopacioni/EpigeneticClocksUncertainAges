@@ -42,7 +42,7 @@ nFolds <- 8
 set.seed(13)
 kfolds <- rsample::vfold_cv(data=cbind(meta[, .(RNR, AgeYrs, AgeClass)], finx), 
                             v=nFolds, strata="AgeClass")
-
+#### random & wide ####
 ls_fitrandom <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, 
                      glmnet_alpha=0.2, glmnet_lambda="min", lnstd="wide",
                      #niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
@@ -55,6 +55,7 @@ ls_fitrandom <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1,
 save(list = c("kfolds", "ls_fitrandom"), 
      file = file.path(pathResults, "list_random.rda"))
 
+#### informative & wide ####
 ls_fit_informative <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, 
                      glmnet_alpha=0.2, glmnet_lambda="min", lnstd="wide",
                      #niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
@@ -67,6 +68,7 @@ ls_fit_informative <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1,
 save(list = c("kfolds", "ls_fit_informative"), 
      file = file.path("./HallerResultsInformative", "list_informative.rda"))
 
+#### random & narrow ####
 ls_fitrandomNarrow <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, 
                            glmnet_alpha=0.2, glmnet_lambda="min", lnstd="narrow",
                            qInterval = 1.5, cert=FALSE,
@@ -80,6 +82,7 @@ ls_fitrandomNarrow <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1,
 save(list = c("kfolds", "ls_fitrandomNarrow"), 
      file = file.path("./HallerResultsRandomNarrow", "list_randomNarrow.rda"))
 
+#### informative & narrow ####
 ls_fit_informativeNarrow <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, 
                                  glmnet_alpha=0.2, glmnet_lambda="min", lnstd="narrow",
                                  qInterval = 1.5, cert=FALSE,
@@ -93,15 +96,29 @@ ls_fit_informativeNarrow <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=
 save(list = c("kfolds", "ls_fit_informativeNarrow"), 
      file = file.path("./HallerResultsInformativeNarrow", "list_informativeNarrow.rda"))
 
+#### drop uncertain age ####
+ls_fit_dropUncertain <- fit_dropUncertClocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, 
+                                       glmnet_alpha=0.2, glmnet_lambda="min", lnstd="narrow",
+                                       qInterval = 1.5, cert=FALSE,
+                                       #niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
+                                       #niter_uncert=c(100, 100), nburnin_uncert=c(50, 50), 
+                                       niter_cert=c(25000, 50000), nburnin_cert=c(5000, 20000),
+                                       niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000), 
+                                       propUncert=c(0.3, 0.4, 0.5), y_min="informative",
+                                       pathResults="./HallerResultsInformativeNarrow", 
+                                       pathConvergence="./HallerConvergenceInformativeNarrow")
+save(list = c("kfolds", "ls_fit_informativeNarrow"), 
+     file = file.path("./HallerResultsInformativeNarrow", "list_informativeNarrow.rda"))
+
 #### Raw predictors ####
-ls_fitrandomRaw <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, PCR=FALSE,
-                           glmnet_alpha=0.2, glmnet_lambda="min", lnstd="wide",
-                           # niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
-                           # niter_uncert=c(100, 100), nburnin_uncert=c(50, 50),
-                           niter_cert=c(25000, 50000), nburnin_cert=c(5000, 20000),
-                           niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000),
-                           propUncert=c(0.3), y_min="random", HS=FALSE,
-                           pathResults="./HallerResultsRandomRaw", 
-                           pathConvergence="./HallerConvergenceRandomRaw")
-save(list = c("kfolds", "ls_fitrandomRaw"), 
-     file = file.path(pathResults, "list_randomRaw.rda"))
+# ls_fitrandomRaw <- fit_clocks(nFolds, kfolds, ageTrans=FALSE, maturity=1, PCR=FALSE,
+#                            glmnet_alpha=0.2, glmnet_lambda="min", lnstd="wide",
+#                            # niter_cert=c(250, 500), nburnin_cert=c(50, 200), # testing
+#                            # niter_uncert=c(100, 100), nburnin_uncert=c(50, 50),
+#                            niter_cert=c(25000, 50000), nburnin_cert=c(5000, 20000),
+#                            niter_uncert=c(100000, 100000), nburnin_uncert=c(50000, 50000),
+#                            propUncert=c(0.3), y_min="random", HS=FALSE,
+#                            pathResults="./HallerResultsRandomRaw", 
+#                            pathConvergence="./HallerConvergenceRandomRaw")
+# save(list = c("kfolds", "ls_fitrandomRaw"), 
+#      file = file.path(pathResults, "list_randomRaw.rda"))
