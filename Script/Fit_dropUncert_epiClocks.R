@@ -130,8 +130,13 @@ fit_dropUncertClocks <- function(nFolds, kfolds, ageTrans=FALSE, SSL=TRUE, HS=TR
   }
   
 #### Fit glmnet ####
-glmnet_res <- lapply(seq_len(nFolds), cvKfold_glmnet, kfold_sel=kfolds, PCvar=PCvar,
-                     glmnet_alpha=glmnet_alpha, glmnet_lambda=glmnet_lambda)
+  glmnet_cv4fold_dropUncertAge_res <- vector("list", length = length(propUncert))
+  
+  for(p in propUncert) {
+    
+glmnet_res <- lapply(seq_len(nFolds), cvKfold_glmnet_dropUncert, kfold_sel=kfolds, 
+                     PCvar=PCvar,
+                     glmnet_alpha=glmnet_alpha, glmnet_lambda=glmnet_lambda, p=p)
 glmnet_res <- do.call(rbind, glmnet_res)
 if(ageTrans) {
   glmnet_res[, AgeYrs:=fun_llin3.inv(AgeYrs, maturity=maturity)]
@@ -147,13 +152,17 @@ ggplot(glmnet_res, aes(AgeYrs, AgePred)) + geom_point() + geom_abline(slope=1) +
   geom_text(data=dt, col="red", aes(x=Inf, y=-Inf, vjust=-1, hjust=1.1, 
                          label=paste0("r = ", r, "\nMAE = ", MAE)))
 
-ggsave(file.path(pathResults, "glmnet_plot.png"), width=15, height=10, units='cm')
+ggsave(file.path(pathResults, paste("glmnet", p, "plot.png", sep="_")), 
+                 width=15, height=10, units='cm')
 
+glmnet_cv4fold_dropUncertAge_res[[which(propUncert == p)]] <- glmnet_res
+  }
+  names(glmnet_cv4fold_dropUncertAge_res) <- propUncert
 
 cl <- makeCluster(nFolds)
 on.exit(stopCluster(cl))
 
-#### Fit SSL and HS when ages are uncertain ####
+#### Fit SSL and HS dropping uncertain age ####
 # debug
 # debug(cvKfold_uncertAge)
 # cv4fold_uncertAge <- cvKfold_uncertAge(k=8, kfold_sel=kfolds)
@@ -216,5 +225,5 @@ write.csv(subtable[, .N, by=.(.id, Fold, p)], file.path(pathConvergence,
                                                      "Rhat_short.csv"), 
           row.names=FALSE)
 
-return(list(glmnet_res, cv4fold_certAge, cv4fold_uncertAge_res))
+return(list(glmnet_cv4fold_dropUncertAge_res, cv4fold_uncertAge_res))
 }

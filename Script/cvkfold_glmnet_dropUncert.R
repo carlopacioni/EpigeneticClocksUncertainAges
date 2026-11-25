@@ -1,8 +1,21 @@
-cvKfold_glmnet_dropUncert <- function(k, kfold_sel, PCvar, glmnet_alpha, glmnet_lambda) {
+cvKfold_glmnet_dropUncert <- function(k, kfold_sel, PCvar, 
+                                      glmnet_alpha, glmnet_lambda, p) {
   
   #### Prep data ####
   train <- analysis(kfold_sel$splits[[k]])
   test <- assessment(kfold_sel$splits[[k]])
+  
+  y <- train[, AgeYrs]
+  
+  s <- rep(FALSE, length(y))
+  if(trans) y_yr <- fun_llin3.inv(y, maturity = maturity) else y_yr <- y
+  set.seed(22)
+  # sample with age < 1 yr are known
+  for(i in seq_along(y)) {
+    s[i] <- ifelse(y_yr[i]<=1, s[i], as.logical(rbinom(1, size=1, p)))
+  }
+  
+  train <- train[!s, ]
   
   # Prep train data
   pca <- prcomp(train[, -(1:3)])
