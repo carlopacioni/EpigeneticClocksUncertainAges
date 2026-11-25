@@ -67,6 +67,7 @@ cvKfold_dropUncertAge <- function(k, kfold_sel, PCvar, lambda1,
   
   # remove samples with uncertain age
   pcax <- pcax[!s, ]
+  y <- train[!s, AgeYrs]
   
   #### PC SSL regression ####
   if(SSL) {
